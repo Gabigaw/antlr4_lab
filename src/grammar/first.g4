@@ -1,44 +1,75 @@
 grammar first;
 
-prog:	stat* EOF ;
+prog: stat* EOF ;
 
-stat: expr #expr_stat
-    | IF_kw '(' cond=expr ')' then=block  ('else' else=block)? #if_stat
-    | '>' expr #print_stat
+stat
+    : logexpr SEMI                                                 #logexpr_stat
+    | TYPE ID ('=' expr)? SEMI                                  #var_decl
+    | IF_kw '(' cond=logexpr ')' thenBlock=block ('else' elseBlock=block)? #if_stat
+    | WHILE_kw '(' cond=logexpr ')' body=block                     #while_stat
+    | PRINT_kw expr SEMI                                        #print_stat
     ;
 
-block : stat #block_single
-    | '{' block* '}' #block_real
+block
+    : stat                                                      #block_single
+    | '{' stat* '}'                                             #block_real
     ;
 
-expr:
-        l=expr op=(MUL|DIV) r=expr #binOp
-    |	l=expr op=(ADD|SUB) r=expr #binOp
-    |	INT #int_tok
-    |	'(' expr ')' #pars
-    | <assoc=right> ID '=' expr # assign
+logexpr
+    : expr OR expr                                              #orExpr
+    | expr AND expr                                             #andExpr
+    | comexpr                                                   #comparexpr
     ;
 
-IF_kw : 'if' ;
+comexpr
+    : expr (EQ | NEQ) expr                                      #eqExpr
+    | expr (LT | GT | LEQ | GEQ) expr                           #relExpr
+    | expr                                                      #xexpr
+    ;
 
-DIV : '/' ;
+expr
+    : <assoc=right> ID '=' expr                                 #assignExpr
+    | expr (ADD | SUB) expr                                     #addExpr
+    | expr (MUL | DIV) expr                                     #mulExpr
+    | NOT expr                                                  #notExpr
+    | '(' expr ')'                                              #parensExpr
+    | INT                                                       #intExpr
+    | TRUE                                                      #trueExpr
+    | FALSE                                                     #falseExpr
+    | ID                                                        #idExpr
+    ;
 
-MUL : '*' ;
+TYPE     : 'int' ;
+IF_kw    : 'if' ;
+WHILE_kw : 'while' ;
+PRINT_kw : 'print' ;
 
-SUB : '-' ;
+OR   : 'or' ;
+AND  : 'and' ;
+NOT  : 'not' ;
 
-ADD : '+' ;
+EQ   : '==' ;
+NEQ  : '!=' ;
+LT   : '<' ;
+GT   : '>' ;
+LEQ  : '<=' ;
+GEQ  : '>=' ;
 
-//NEWLINE : [\r\n]+ -> skip;
+MUL  : '*' ;
+DIV  : '/' ;
+ADD  : '+' ;
+SUB  : '-' ;
+
+TRUE  : 'true' ;
+FALSE : 'false' ;
+
+SEMI : ';' ;
+
 NEWLINE : [\r\n]+ -> channel(HIDDEN);
+WS      : [ \t]+  -> channel(HIDDEN);
 
-//WS : [ \t]+ -> skip ;
-WS : [ \t]+ -> channel(HIDDEN) ;
+INT : [0-9]+ ;
+ID  : [a-zA-Z_][a-zA-Z0-9_]* ;
 
-INT     : [0-9]+ ;
-
-
-ID : [a-zA-Z_][a-zA-Z0-9_]* ;
-
-COMMENT : '/*' .*? '*/' -> channel(HIDDEN) ;
-LINE_COMMENT : '//' ~'\n'* '\n' -> channel(HIDDEN) ;
+COMMENT      : '/*' .*? '*/' -> channel(HIDDEN);
+LINE_COMMENT : '//' ~[\r\n]* -> channel(HIDDEN);
