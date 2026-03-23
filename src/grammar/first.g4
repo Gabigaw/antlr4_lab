@@ -1,6 +1,6 @@
 grammar first;
 
-prog: stat* EOF ;
+prog: stat* EOF;
 
 stat
     : logexpr SEMI                                                 #logexpr_stat

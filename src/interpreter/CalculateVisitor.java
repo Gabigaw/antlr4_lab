@@ -75,14 +75,22 @@ public class CalculateVisitor extends firstBaseVisitor<Integer> {
         return result;
     }
 
-    /*
+
     @Override
-    public Integer visitExpr_stat(firstParser.Expr_statContext ctx) {
+    public Integer visitLogexpr_stat(firstParser.Logexpr_statContext ctx) {
         return visit(ctx.logexpr());
     }
 
-     tu cos nie działa idk
-     */
+    @Override
+    public Integer visitComparexpr(firstParser.ComparexprContext ctx) {
+        return visit(ctx.comexpr());
+    }
+
+    @Override
+    public Integer visitXexpr(firstParser.XexprContext ctx) {
+        return visit(ctx.expr());
+    }
+
     @Override
     public Integer visitVar_decl(firstParser.Var_declContext ctx) {
         String name = ctx.ID().getText();
