@@ -17,11 +17,10 @@ public class CanOptimizeVisitor extends firstBaseVisitor<Integer> {
 
     @Override
     public Integer visitAddExpr(firstParser.AddExprContext ctx) {
-        Integer left = visit(ctx.expr(0));
-        Integer right = visit(ctx.expr(1));
-        String op = ctx.getChild(1).getText();
+        int left = visit(ctx.expr(0));
+        int right = visit(ctx.expr(1));
 
-        if (op.equals("+")) {
+        if (ctx.ADD() != null) {
             return left + right;
         } else {
             return left - right;
@@ -30,11 +29,10 @@ public class CanOptimizeVisitor extends firstBaseVisitor<Integer> {
 
     @Override
     public Integer visitMulExpr(firstParser.MulExprContext ctx) {
-        Integer left = visit(ctx.expr(0));
-        Integer right = visit(ctx.expr(1));
-        String op = ctx.getChild(1).getText();
+        int left = visit(ctx.expr(0));
+        int right = visit(ctx.expr(1));
 
-        if (op.equals("*")) {
+        if (ctx.MUL() != null) {
             return left * right;
         } else {
             if (right == 0) {

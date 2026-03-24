@@ -1,7 +1,7 @@
 group pierwszy;
 
 deflt(elem) ::= <<
-    <elem; separator="\n">
+<elem; separator="\n">
 >>
 
 int(i) ::= <<
@@ -18,6 +18,36 @@ dodaj(p1,p2) ::= <<
 ADD
 >>
 
+odejmij(p1,p2) ::= <<
+<twoop(p1,p2)>
+SUB
+>>
+
+pomnoz(p1,p2) ::= <<
+<twoop(p1,p2)>
+MUL
+>>
+
+podziel(p1,p2) ::= <<
+<twoop(p1,p2)>
+DIV
+>>
+
 dek(n) ::= <<
 DD <n>
+>>
+
+dekinit(n,p) ::= <<
+DD <n>
+<p>
+POP [<n>]
+>>
+
+load(n) ::= <<
+PUSH [<n>]
+>>
+
+assign(n,p) ::= <<
+<p>
+POP [<n>]
 >>
