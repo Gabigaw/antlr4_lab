@@ -28,10 +28,28 @@ public class EmitVisitor extends firstBaseVisitor<ST> {
     }
 
     @Override
+    public ST visitFunc_def(firstParser.Func_defContext ctx) {
+        var st = stGroup.getInstanceOf("funcdef");
+        st.add("name", ctx.name.getText())
+            .add("body", visit(ctx.body));
+        return st;
+    }
+
+    @Override
+    public ST visitFunc_call(firstParser.Func_callContext ctx) {
+        var st = stGroup.getInstanceOf("funcall");
+        st.add("name", ctx.name.getText());
+        for (firstParser.LogexprContext arg :ctx.arg) {
+            st.add("pars", visit(arg));
+        }
+        return st;
+    }
+ /*
+    @Override
     public ST visitTerminal(TerminalNode node) {
         return new ST("Terminal node:<n>").add("n", node.getText());
     }
-
+*/
     @Override
     public ST visitIntExpr(firstParser.IntExprContext ctx) {
         ST st = stGroup.getInstanceOf("int");

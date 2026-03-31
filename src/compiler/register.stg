@@ -35,6 +35,30 @@ podziel(p1,p2) ::= <<
 DIV A,B
 >>
 
+par(p) ::= <<
+<p>
+PUSH A
+>>
+
+parpop(p) ::= <<
+POP B
+>>
+
+funcall(name, pars, body, skok) ::= <<
+<pars:par(); separator="\n">
+CALL <name>
+<pars:parpop(); separator="\n">
+>>
+
+funcdef(name, pars, body) ::= <<
+<name>:
+PUSH BP
+MOV BP,SP
+<body>
+POP BP
+RET
+>>
+
 dek(n) ::= <<
 DD <n>
 >>

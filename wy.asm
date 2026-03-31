@@ -1,38 +1,28 @@
+square:
+PUSH BP
+MOV BP,SP
 MOV A,#2
 PUSH A
 MOV A,#1
 POP B
-ADD A,B
-Terminal node:;
-MOV A,#3
-PUSH A
-MOV A,#2
-PUSH A
+SUB A,B
+
+
+POP BP
+RET
+
 MOV A,#1
+PUSH A
+MOV A,#11
 POP B
 ADD A,B
-POP B
-ADD A,B
-Terminal node:>
-MOV A,#3
 PUSH A
 MOV A,#2
-POP B
-SUB A,B
-Terminal node:;
-MOV A,#7
-MOV [x],A
-Terminal node:;
-MOV A,[x]
 PUSH A
-MOV A,#5
-POP B
-SUB A,B
-Terminal node:;
 MOV A,#3
-Terminal node:;
-MOV A,#4
-Terminal node:;
-MOV A,#5
-Terminal node:;
-Terminal node:<EOF>
+PUSH A
+CALL square
+POP B
+POP B
+POP B
+

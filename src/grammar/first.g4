@@ -1,6 +1,10 @@
 grammar first;
 
-prog: stat* EOF;
+prog: (stat|func_def)* EOF;
+
+func_def : name=ID '(' par +=ID (',' par+=ID)* ')' body=block;
+
+func_call : name=ID '(' arg +=logexpr (',' arg+=logexpr)* ')';
 
 stat
     : logexpr SEMI                                                 #logexpr_stat
@@ -37,6 +41,7 @@ expr
     | TRUE                                                      #trueExpr
     | FALSE                                                     #falseExpr
     | ID                                                        #idExpr
+    | func_call #func_call_label
     ;
 
 TYPE     : 'int' ;
